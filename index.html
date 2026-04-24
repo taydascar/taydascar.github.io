@@ -80,12 +80,10 @@ body{font-family:var(--sans);color:var(--ink);background:var(--surface);font-siz
     <h1>Risk Operations<br>&amp; AI-Assisted Analysis</h1>
     <p>6+ years detecting fraud, building AML programs, and integrating AI detection systems. Now applying those instincts with AI-augmented tooling — text-to-SQL, pattern analysis, and scalable detection workflows.</p>
     <div class="hero-links">
-      <!-- REPLACE href="#" WITH YOUR RESUME PDF LINK -->
-      <a class="btn btn-accent" https://drive.google.com/file/d/1ccQYPVkD7zytY8_1u6VulZY3ISaUy_4n/view?usp=sharing>Resume ↗</a>
-      <a class="btn" href="#demo">Live Demo ↓</a>
-      <!-- REPLACE href WITH YOUR EMAIL -->
-      <a class="btn" href="mailto:taydascar@gmail.com">Email</a>
-    </div>
+  <a class="btn btn-accent" href="https://drive.google.com/file/d/1ccQYPVkD7zytY8_1u6VulZY3ISaUy_4n/view?usp=sharing" target="_blank">Resume ↗</a>
+  <a class="btn" href="#demo">Live Demo ↓</a>
+  <a class="btn" href="mailto:taydascar@gmail.com">Contact</a>
+</div>
   </div>
 </div>
 
@@ -122,7 +120,7 @@ body{font-family:var(--sans);color:var(--ink);background:var(--surface);font-siz
   <p style="font-size:13px;color:var(--ink2);margin-bottom:1rem">This demo shows how AI tools accelerate fraud investigation workflows. Ask a question in plain English about a sample contributor integrity dataset — the AI generates and explains the SQL query, then returns simulated results.</p>
 
   <div class="demo-box">
-    <div class="schema-block">-- Sample schema: contributor_events (Trust &amp; Safety context)
+    <div class="schema-block">-- contributor_events (Trust &amp; Safety context)
 contributor_id  TEXT       -- unique contributor
 event_type      TEXT       -- 'task_submit' | 'login' | 'flag' | 'payout'
 timestamp       TIMESTAMP
@@ -131,7 +129,7 @@ device_id       TEXT
 task_id         TEXT
 score           FLOAT      -- quality score 0–1
 region          TEXT
-is_suspicious   BOOLEAN</div>
+is_suspicious   Y/N</div>
 
     <div class="query-examples">
       <span class="qex" onclick="setQ('Show contributors with more than 50 submissions in one hour')">High-velocity submitters</span>
