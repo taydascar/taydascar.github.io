@@ -1,0 +1,1998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taylor D. Carter — Fraud Operations & Trust Safety</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f0d;
+    --bg2: #151512;
+    --bg3: #1c1c18;
+    --surface: #222220;
+    --surface2: #2a2a26;
+    --border: #333330;
+    --border2: #3d3d38;
+    --text: #e8e6df;
+    --text2: #a8a49a;
+    --text3: #6b6760;
+    --accent: #c8a96e;
+    --accent2: #a8874e;
+    --accent3: #e8c98e;
+    --red: #c26a5a;
+    --green: #7aaa8a;
+    --blue: #6a8eaa;
+    --amber: #c8a96e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* Grid texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,169,110,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,169,110,0.015) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 3rem;
+    background: rgba(15,15,13,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text3);
+    text-decoration: none;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 3rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: -20%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(200,169,110,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.2s;
+  }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    line-height: 1.05;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.4s;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--text2);
+    max-width: 560px;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.6s;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.8s;
+  }
+
+  .hero-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .hero-stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.2rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .hero-stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text3);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 3rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text3);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 1.2s;
+  }
+
+  .hero-scroll::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--border2);
+  }
+
+  /* SECTIONS */
+  section {
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 7rem 3rem;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .section-label::after {
+    content: '';
+    display: block;
+    height: 1px;
+    width: 60px;
+    background: var(--accent2);
+    opacity: 0.4;
+  }
+
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    line-height: 1.15;
+    margin-bottom: 3rem;
+  }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .about-text p {
+    color: var(--text2);
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
+  }
+
+  .about-text p strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .competency-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .competency-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text2);
+    padding: 0.6rem 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    letter-spacing: 0.05em;
+    background: var(--surface);
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .competency-tag:hover {
+    border-color: var(--accent2);
+    color: var(--accent3);
+  }
+
+  /* EXPERIENCE */
+  .experience-bg {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 3rem;
+    padding: 3rem 0;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  .timeline-item:last-child { border-bottom: none; }
+
+  .timeline-left {
+    padding-top: 0.25rem;
+  }
+
+  .timeline-company {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    color: var(--text);
+    margin-bottom: 0.35rem;
+  }
+
+  .timeline-period {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+
+  .timeline-location {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--text3);
+    letter-spacing: 0.08em;
+  }
+
+  .timeline-right {}
+
+  .timeline-role {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+
+  .timeline-bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .timeline-bullets li {
+    font-size: 0.9rem;
+    color: var(--text2);
+    padding-left: 1.25rem;
+    position: relative;
+    line-height: 1.65;
+  }
+
+  .timeline-bullets li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--accent2);
+    opacity: 0.6;
+  }
+
+  .timeline-highlight {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--accent);
+    background: rgba(200,169,110,0.08);
+    border: 1px solid rgba(200,169,110,0.2);
+    padding: 0.15rem 0.5rem;
+    border-radius: 2px;
+    margin-left: 0.3rem;
+  }
+
+  /* SKILLS ROW */
+  .skills-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 2rem;
+  }
+
+  .skill-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--text3);
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    letter-spacing: 0.06em;
+  }
+
+  /* TOOL SECTION */
+  .tool-section {
+    background: var(--bg);
+  }
+
+  .tool-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    margin-bottom: 3rem;
+    align-items: end;
+  }
+
+  .tool-desc {
+    color: var(--text2);
+    font-size: 0.95rem;
+    line-height: 1.8;
+  }
+
+  .tool-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: flex-end;
+  }
+
+  .tool-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 2px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .badge-rail { background: rgba(106,142,170,0.12); color: var(--blue); border: 1px solid rgba(106,142,170,0.25); }
+  .badge-compliance { background: rgba(122,170,138,0.12); color: var(--green); border: 1px solid rgba(122,170,138,0.25); }
+  .badge-ai { background: rgba(200,169,110,0.1); color: var(--accent); border: 1px solid rgba(200,169,110,0.2); }
+
+  /* TOOL INTERFACE */
+  .tool-interface {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--bg2);
+  }
+
+  .tool-topbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0.9rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .tool-topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .tool-dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .tool-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+
+  .dot-r { background: #c26a5a44; border: 1px solid #c26a5a66; }
+  .dot-y { background: #c8a96e44; border: 1px solid #c8a96e66; }
+  .dot-g { background: #7aaa8a44; border: 1px solid #7aaa8a66; }
+
+  .tool-title-bar {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text3);
+    letter-spacing: 0.1em;
+  }
+
+  .tool-status {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--green);
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+
+  /* TABS */
+  .tool-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg3);
+  }
+
+  .tool-tab {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text3);
+    padding: 0.85rem 1.5rem;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 2px solid transparent;
+  }
+
+  .tool-tab:hover { color: var(--text2); }
+  .tool-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* CASE QUEUE */
+  .tool-body {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    min-height: 580px;
+  }
+
+  .case-queue {
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    max-height: 580px;
+  }
+
+  .queue-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .queue-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--text3);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .queue-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--accent);
+  }
+
+  .case-card {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+  }
+
+  .case-card:hover { background: var(--surface); }
+  .case-card.selected { background: var(--surface); border-left: 2px solid var(--accent); }
+
+  .case-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.4rem;
+  }
+
+  .case-id {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+  }
+
+  .risk-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 2px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .risk-high { background: rgba(194,106,90,0.15); color: var(--red); border: 1px solid rgba(194,106,90,0.3); }
+  .risk-medium { background: rgba(200,169,110,0.12); color: var(--amber); border: 1px solid rgba(200,169,110,0.25); }
+  .risk-low { background: rgba(122,170,138,0.12); color: var(--green); border: 1px solid rgba(122,170,138,0.25); }
+
+  .case-amount {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    color: var(--text);
+    margin-bottom: 0.3rem;
+  }
+
+  .case-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    color: var(--text3);
+    letter-spacing: 0.06em;
+  }
+
+  .case-rail-tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 2px;
+    margin-top: 0.4rem;
+    letter-spacing: 0.05em;
+  }
+
+  .rail-cc { background: rgba(106,142,170,0.1); color: var(--blue); border: 1px solid rgba(106,142,170,0.2); }
+  .rail-wire { background: rgba(194,106,90,0.1); color: var(--red); border: 1px solid rgba(194,106,90,0.2); }
+  .rail-ach { background: rgba(122,170,138,0.1); color: var(--green); border: 1px solid rgba(122,170,138,0.2); }
+  .rail-sepa { background: rgba(150,120,200,0.1); color: #9a8aee; border: 1px solid rgba(150,120,200,0.2); }
+  .rail-apple { background: rgba(200,169,110,0.08); color: var(--accent); border: 1px solid rgba(200,169,110,0.18); }
+  .rail-google { background: rgba(170,170,100,0.08); color: #aaaa6e; border: 1px solid rgba(170,170,100,0.18); }
+
+  /* ANALYSIS PANEL */
+  .analysis-panel {
+    padding: 1.5rem;
+    overflow-y: auto;
+    max-height: 580px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .analysis-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 1rem;
+    color: var(--text3);
+    text-align: center;
+  }
+
+  .analysis-empty-icon {
+    font-size: 2.5rem;
+    opacity: 0.3;
+  }
+
+  .analysis-empty p {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .analyze-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--bg);
+    background: var(--accent);
+    border: none;
+    padding: 0.75rem 1.75rem;
+    border-radius: 2px;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .analyze-btn:hover { background: var(--accent3); }
+  .analyze-btn:active { transform: scale(0.98); }
+  .analyze-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .upload-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--text2);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 0.6rem 1.2rem;
+    border-radius: 2px;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+
+  .upload-btn:hover { border-color: var(--accent2); color: var(--accent); }
+
+  /* MEMO OUTPUT */
+  .memo-header {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 1rem 1.25rem;
+  }
+
+  .memo-case-id {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    margin-bottom: 0.4rem;
+  }
+
+  .memo-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+  }
+
+  .memo-meta-row {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .memo-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .memo-meta-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    color: var(--text3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .memo-meta-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text);
+  }
+
+  .memo-section {
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .memo-section-header {
+    background: var(--surface);
+    padding: 0.65rem 1.25rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--text3);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .memo-section-body {
+    padding: 1rem 1.25rem;
+    font-size: 0.875rem;
+    color: var(--text2);
+    line-height: 1.75;
+  }
+
+  .memo-section-body strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .memo-section-body .cite {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent);
+    background: rgba(200,169,110,0.08);
+    border: 1px solid rgba(200,169,110,0.15);
+    padding: 0.1rem 0.4rem;
+    border-radius: 2px;
+    display: inline-block;
+    margin: 0 0.15rem;
+  }
+
+  .disposition-block {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1.25rem;
+    background: var(--bg3);
+  }
+
+  .disposition-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--text3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .disposition-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .disp-hold { color: var(--red); }
+  .disp-escalate { color: var(--amber); }
+  .disp-clear { color: var(--green); }
+
+  .confidence-bar-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .confidence-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    color: var(--text3);
+    letter-spacing: 0.08em;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .confidence-bar {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .confidence-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 1s ease;
+  }
+
+  .loading-state {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem 0;
+  }
+
+  .loading-line {
+    height: 12px;
+    background: var(--surface2);
+    border-radius: 2px;
+    animation: shimmer 1.5s infinite;
+  }
+
+  .loading-line.short { width: 60%; }
+  .loading-line.med { width: 85%; }
+  .loading-line.full { width: 100%; }
+
+  /* UPLOAD ZONE */
+  .upload-zone {
+    border: 1px dashed var(--border2);
+    border-radius: 3px;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--bg3);
+  }
+
+  .upload-zone:hover, .upload-zone.drag-over {
+    border-color: var(--accent2);
+    background: rgba(200,169,110,0.04);
+  }
+
+  .upload-zone p {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text3);
+    letter-spacing: 0.08em;
+  }
+
+  .upload-zone input { display: none; }
+
+  /* CONTACT */
+  .contact-section {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .contact-text {
+    color: var(--text2);
+    font-size: 0.95rem;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: var(--text2);
+    font-size: 0.9rem;
+    transition: color 0.2s;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .contact-link:last-child { border-bottom: none; }
+  .contact-link:hover { color: var(--accent); }
+
+  .contact-link-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--text3);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    width: 70px;
+  }
+
+  .contact-right {
+    padding-top: 1rem;
+  }
+
+  .availability-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 2rem;
+  }
+
+  .availability-status {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .avail-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+
+  .avail-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--green);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .availability-card h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .availability-card p {
+    font-size: 0.875rem;
+    color: var(--text2);
+    line-height: 1.7;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 2rem 3rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-copy {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--text3);
+    letter-spacing: 0.1em;
+  }
+
+  .footer-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--accent2);
+    letter-spacing: 0.1em;
+    opacity: 0.6;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  @keyframes shimmer {
+    0% { opacity: 0.4; }
+    50% { opacity: 0.7; }
+    100% { opacity: 0.4; }
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    display: inline-block;
+  }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { gap: 1.5rem; }
+    .hero { padding: 7rem 1.5rem 4rem; }
+    .section-inner { padding: 5rem 1.5rem; }
+    .about-grid, .tool-header, .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .tool-body { grid-template-columns: 1fr; }
+    .case-queue { max-height: 300px; border-right: none; border-bottom: 1px solid var(--border); }
+    .timeline-item { grid-template-columns: 1fr; gap: 1rem; }
+    .tool-badges { justify-content: flex-start; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">TDC // Fraud Ops</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#tool">Tool Demo</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">Trust & Safety · Fraud Operations · AI-Augmented Investigation</div>
+  <h1>Taylor D.<br><em>Carter</em></h1>
+  <p class="hero-sub">Fraud operations professional with 6+ years owning complex investigations, dispute lifecycle management, and KYC/AML verification in high-growth fintech environments — now building the AI-augmented tools that define what comes next.</p>
+  <div class="hero-meta">
+    <div class="hero-stat">
+      <span class="hero-stat-num">6+</span>
+      <span class="hero-stat-label">Years in Fraud Ops</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">96%</span>
+      <span class="hero-stat-label">Resolution Accuracy</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">80%</span>
+      <span class="hero-stat-label">Fraud Incident Reduction</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">33%</span>
+      <span class="hero-stat-label">Alert Volume Cut</span>
+    </div>
+  </div>
+  <div class="hero-scroll">scroll to explore</div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <div class="section-label">Profile</div>
+    <h2 class="section-title reveal">The operator behind<br>the investigation.</h2>
+    <div class="about-grid reveal">
+      <div class="about-text">
+        <p>I've spent 6+ years in the intersection of fraud operations, trust & safety, and compliance — inside fintech environments where the stakes are real and the margin for error is zero.</p>
+        <p>My edge isn't just investigating cases. It's <strong>building the systems, playbooks, and tooling</strong> that make investigation teams faster, more consistent, and audit-ready by default.</p>
+        <p>During my career break, I didn't step away from the work — I stepped into what's coming next: <strong>AI-augmented fraud analysis.</strong> The tool demonstrated on this page is a direct result of that work. It represents how I think about the future of this function.</p>
+        <p>Based in New York, NY. Available for roles in fraud operations, trust & safety leadership, and AI-assisted compliance tooling.</p>
+      </div>
+      <div>
+        <div style="margin-bottom:1.25rem;">
+          <div class="section-label" style="margin-bottom:0.75rem;">Core Competencies</div>
+        </div>
+        <div class="competency-grid">
+          <span class="competency-tag">Fraud Investigation</span>
+          <span class="competency-tag">Case Management</span>
+          <span class="competency-tag">Dispute Resolution</span>
+          <span class="competency-tag">Chargeback Lifecycle</span>
+          <span class="competency-tag">KYC / AML / CDD</span>
+          <span class="competency-tag">BSA / OFAC / SAR</span>
+          <span class="competency-tag">Transaction Monitoring</span>
+          <span class="competency-tag">Policy Enforcement</span>
+          <span class="competency-tag">Reg E / Reg CC</span>
+          <span class="competency-tag">UCC Article 4A</span>
+          <span class="competency-tag">SQL · Tableau</span>
+          <span class="competency-tag">PowerBI · KPI Reporting</span>
+          <span class="competency-tag">AI Prompt Engineering</span>
+          <span class="competency-tag">Agentic Fraud Tools</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience" class="experience-bg">
+  <div class="section-inner">
+    <div class="section-label">Work History</div>
+    <h2 class="section-title reveal">Where the work<br>was done.</h2>
+
+    <div class="timeline">
+
+      <div class="timeline-item reveal">
+        <div class="timeline-left">
+          <div class="timeline-company">Independent</div>
+          <div class="timeline-period">Sep 2023 — Present</div>
+          <div class="timeline-location">Remote</div>
+        </div>
+        <div class="timeline-right">
+          <div class="timeline-role">Career Break — Primary Family Caregiver & AI Fraud Tooling Development</div>
+          <ul class="timeline-bullets">
+            <li>Maintained professional currency while serving as full-time family caregiver by building AI-augmented fraud analytics skills.</li>
+            <li>Developed a live text-to-SQL risk analysis portfolio and the agentic fraud triage engine demonstrated on this page — covering multi-rail fraud typologies, compliance citation mapping, and cross-border jurisdiction logic.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-left">
+          <div class="timeline-company">Zebit Inc.</div>
+          <div class="timeline-period">Jun 2021 — Sep 2023</div>
+          <div class="timeline-location">Silver Spring, MD</div>
+        </div>
+        <div class="timeline-right">
+          <div class="timeline-role">Trust & Safety — Senior Fraud Operations Lead <span class="timeline-highlight">E-Commerce Fintech</span></div>
+          <ul class="timeline-bullets">
+            <li>Owned fraud investigation caseload for complex, escalated cases — triaging unauthorized account activity and security incidents as senior point of contact across 4 departments.</li>
+            <li>Managed end-to-end chargeback and dispute lifecycle, evidence gathering, documentation, and submission — eliminating missed deadlines and reducing financial exposure.</li>
+            <li>Enforced AML/Trust & Safety policies across ambiguous edge cases; authored investigation playbooks adopted as operational standard, closing critical process gaps.</li>
+            <li>Conducted KYC/AML/CDD verifications, flagging high-risk profiles and escalating to Compliance; built SQL-driven Tableau and PowerBI KPI reports, cutting alert volume by <span class="timeline-highlight">33%</span>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-left">
+          <div class="timeline-company">Zebit Inc.</div>
+          <div class="timeline-period">Oct 2017 — Jun 2021</div>
+          <div class="timeline-location">San Diego, CA</div>
+        </div>
+        <div class="timeline-right">
+          <div class="timeline-role">Fraud Specialist — Trust & Safety <span class="timeline-highlight">E-Commerce Fintech</span></div>
+          <ul class="timeline-bullets">
+            <li>Investigated and resolved complex fraud and payment disputes end-to-end, maintaining <span class="timeline-highlight">96% resolution accuracy</span> with full documentation for audit and compliance review.</li>
+            <li>Built 2 Tableau fraud detection reports foundational to analytics infrastructure, contributing to an <span class="timeline-highlight">80% reduction</span> in fraud incidents company-wide.</li>
+            <li>Developed fraud detection workflows adopted company-wide; trained staff on escalation handling, policy enforcement, and case documentation standards.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal">
+        <div class="timeline-left">
+          <div class="timeline-company">County of San Diego</div>
+          <div class="timeline-period">Aug 2015 — Oct 2017</div>
+          <div class="timeline-location">San Diego, CA</div>
+        </div>
+        <div class="timeline-right">
+          <div class="timeline-role">TTC Specialist — Chargeback & Compliance Operations <span class="timeline-highlight">Treasurer-Tax Collector</span></div>
+          <ul class="timeline-bullets">
+            <li>Managed chargeback dispute process, evidence review, documentation, and submission — reducing resolution turnaround by <span class="timeline-highlight">20%</span> through targeted workflow improvements.</li>
+            <li>Processed $1M+ in daily wire transfers with zero compliance errors across Oracle and Trustref; managed 180+ bond series under strict regulatory standards.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Technical Skills -->
+    <div style="margin-top:3rem;" class="reveal">
+      <div class="section-label" style="margin-bottom:1rem;">Technical Stack</div>
+      <div style="margin-bottom:0.75rem;">
+        <div style="font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.5rem;">Investigations & Compliance</div>
+        <div class="skills-row">
+          <span class="skill-pill">Fraud Case Management</span>
+          <span class="skill-pill">KYC / AML / CDD</span>
+          <span class="skill-pill">BSA / AML</span>
+          <span class="skill-pill">OFAC</span>
+          <span class="skill-pill">SAR / CTR Filing</span>
+          <span class="skill-pill">Reg E</span>
+          <span class="skill-pill">Reg CC</span>
+          <span class="skill-pill">UCC Article 4A</span>
+        </div>
+      </div>
+      <div style="margin-bottom:0.75rem;">
+        <div style="font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.5rem;">Analytics</div>
+        <div class="skills-row">
+          <span class="skill-pill">SQL</span>
+          <span class="skill-pill">Tableau</span>
+          <span class="skill-pill">PowerBI</span>
+          <span class="skill-pill">Data Visualization</span>
+          <span class="skill-pill">KPI Reporting</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.5rem;">Systems</div>
+        <div class="skills-row">
+          <span class="skill-pill">LexisNexis</span>
+          <span class="skill-pill">iOvation</span>
+          <span class="skill-pill">CyberSource</span>
+          <span class="skill-pill">Zendesk</span>
+          <span class="skill-pill">Oracle ERP</span>
+          <span class="skill-pill">Trustref</span>
+          <span class="skill-pill">CRM Platforms</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- TOOL -->
+<section id="tool" class="tool-section">
+  <div class="section-inner">
+    <div class="section-label">Live Tool Demo</div>
+    <h2 class="section-title reveal">Agentic Case Triage &<br><em>Narrative Synthesis Engine</em></h2>
+
+    <div class="tool-header reveal">
+      <div class="tool-desc">
+        Select a preloaded synthetic fraud case or upload your own CSV to run an AI-powered triage analysis. The agent identifies the fraud typology, maps applicable compliance obligations, drafts a risk narrative, and produces a defensible disposition memo — the way a senior investigator would, in seconds.
+      </div>
+      <div class="tool-badges">
+        <span class="tool-badge badge-rail">Credit Card</span>
+        <span class="tool-badge badge-rail">ACH</span>
+        <span class="tool-badge badge-rail">Wire Transfer</span>
+        <span class="tool-badge badge-rail">SEPA</span>
+        <span class="tool-badge badge-rail">Apple Pay</span>
+        <span class="tool-badge badge-rail">Google Pay</span>
+        <span class="tool-badge badge-compliance">BSA / AML</span>
+        <span class="tool-badge badge-compliance">Reg E</span>
+        <span class="tool-badge badge-compliance">OFAC</span>
+        <span class="tool-badge badge-compliance">PSD2</span>
+        <span class="tool-badge badge-ai">AI-Powered</span>
+        <span class="tool-badge badge-ai">Claude Sonnet</span>
+      </div>
+    </div>
+
+    <div class="tool-interface reveal">
+      <!-- Topbar -->
+      <div class="tool-topbar">
+        <div class="tool-topbar-left">
+          <div class="tool-dots">
+            <div class="tool-dot dot-r"></div>
+            <div class="tool-dot dot-y"></div>
+            <div class="tool-dot dot-g"></div>
+          </div>
+          <div class="tool-title-bar">FRAUD_TRIAGE_ENGINE_v2.1 // AGENTIC MODE</div>
+        </div>
+        <div class="tool-status">
+          <div class="status-dot"></div>
+          AI ENGINE ACTIVE
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tool-tabs">
+        <button class="tool-tab active" onclick="switchTab('preloaded', this)">Preloaded Cases</button>
+        <button class="tool-tab" onclick="switchTab('upload', this)">Upload CSV</button>
+        <button class="tool-tab" onclick="switchTab('rules', this)">⚙ Custom Rules</button>
+      </div>
+
+      <!-- Main body -->
+      <div class="tool-body">
+
+        <!-- Left: Case Queue -->
+        <div class="case-queue" id="caseQueue">
+          <div class="queue-header">
+            <span class="queue-title">Case Queue</span>
+            <span class="queue-count" id="queueCount">10 cases</span>
+          </div>
+          <div id="caseList"></div>
+        </div>
+
+        <!-- Right: Analysis Panel -->
+        <div class="analysis-panel" id="analysisPanel">
+          <div class="analysis-empty" id="emptyState">
+            <div class="analysis-empty-icon">⬡</div>
+            <p>Select a case to begin analysis</p>
+            <p style="opacity:0.5;margin-top:0.25rem;">AI engine standing by</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Upload zone (hidden by default) -->
+    <div id="uploadTab" style="display:none;margin-top:1rem;">
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('csvInput').click()">
+        <p>Drop your CSV here or click to browse</p>
+        <p style="opacity:0.5;margin-top:0.5rem;">Supports standard fraud transaction exports</p>
+        <input type="file" id="csvInput" accept=".csv" onchange="handleCSVUpload(event)">
+      </div>
+      <div id="uploadedCaseQueue" style="margin-top:1rem;"></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact-section">
+  <div class="section-inner">
+    <div class="section-label">Contact</div>
+    <h2 class="section-title reveal">Let's talk about<br>what's next.</h2>
+
+    <div class="contact-grid reveal">
+      <div>
+        <p class="contact-text">
+          I'm available for fraud operations, trust & safety, and AI-augmented compliance roles — particularly where the team is building toward agentic investigation infrastructure. I bring both the operational depth and the technical fluency to sit at that intersection.
+        </p>
+        <div class="contact-links">
+          <a href="tel:6613311731" class="contact-link">
+            <span class="contact-link-label">Phone</span>
+            (661) 331-1731
+          </a>
+          <a href="mailto:taylordcarter1@gmail.com" class="contact-link">
+            <span class="contact-link-label">Email</span>
+            taylordcarter1@gmail.com
+          </a>
+          <a href="https://linkedin.com/in/taydascar" target="_blank" class="contact-link">
+            <span class="contact-link-label">LinkedIn</span>
+            linkedin.com/in/taydascar
+          </a>
+          <a href="#" class="contact-link">
+            <span class="contact-link-label">Location</span>
+            New York, NY
+          </a>
+        </div>
+      </div>
+
+      <div class="contact-right">
+        <div class="availability-card">
+          <div class="availability-status">
+            <div class="avail-dot"></div>
+            <span class="avail-label">Available for opportunities</span>
+          </div>
+          <h3>Open to the right conversation.</h3>
+          <p>Whether it's a direct role, a consulting engagement, or a conversation about where fraud operations is heading — I'm interested. Reach out via email or LinkedIn and I'll respond within 24 hours.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-copy">© 2025 Taylor D. Carter — Fraud Operations & Trust Safety</span>
+  <span class="footer-tag">// Agentic Fraud Triage Engine · Built with Claude AI</span>
+</footer>
+
+<script>
+// ─── SYNTHETIC FRAUD DATA ─────────────────────────────────────────────────
+const CASES = [
+  {
+    id: "TXN-2024-001",
+    amount: "$14,872.00",
+    currency: "USD",
+    rail: "wire",
+    railLabel: "Wire Transfer",
+    riskLevel: "high",
+    timestamp: "2024-11-14 09:32 EST",
+    sender: "Meridian Solutions LLC",
+    receiver: "FX Global Partners",
+    receiverBank: "Deutsche Bank AG, Frankfurt",
+    country: "DE",
+    deviceId: "N/A",
+    velocityFlags: "First wire to this beneficiary. CFO email changed 48h prior. Urgency language in authorization request.",
+    priorSARs: 0,
+    typology: "Business Email Compromise (BEC)"
+  },
+  {
+    id: "TXN-2024-002",
+    amount: "$3,241.50",
+    currency: "USD",
+    rail: "cc",
+    railLabel: "Credit Card",
+    riskLevel: "high",
+    timestamp: "2024-11-13 23:14 PST",
+    sender: "CARD *4872",
+    receiver: "ElectroMax Store",
+    receiverBank: "Stripe",
+    country: "US",
+    deviceId: "NEW_DEVICE_0092",
+    velocityFlags: "3 declined attempts preceding. New device enrollment 2h prior. Shipping address mismatch. No 3DS authentication.",
+    priorSARs: 0,
+    typology: "Card Not Present (CNP) Fraud"
+  },
+  {
+    id: "TXN-2024-003",
+    amount: "€8,500.00",
+    currency: "EUR",
+    rail: "sepa",
+    railLabel: "SEPA Credit Transfer",
+    riskLevel: "high",
+    timestamp: "2024-11-13 14:55 CET",
+    sender: "Clara Müller",
+    receiver: "Investment Vault GmbH",
+    receiverBank: "N26 Bank, Berlin",
+    country: "DE",
+    deviceId: "MOB-DE-4421",
+    velocityFlags: "Customer reports phone call from 'bank security'. First-time payee. SCA applied but behavioral anomaly: 8x normal transaction amount.",
+    priorSARs: 0,
+    typology: "Authorized Push Payment (APP) Fraud"
+  },
+  {
+    id: "TXN-2024-004",
+    amount: "$1,200.00",
+    currency: "USD",
+    rail: "ach",
+    railLabel: "ACH Debit",
+    riskLevel: "medium",
+    timestamp: "2024-11-12 08:20 CST",
+    sender: "External — Unknown Originator",
+    receiver: "Account #****7731",
+    receiverBank: "Internal",
+    country: "US",
+    deviceId: "N/A",
+    velocityFlags: "3 ACH debits in 4 days from different originators. Account opened 11 days ago. WEB entry class. R10 return window: 60 days.",
+    priorSARs: 0,
+    typology: "Unauthorized ACH / New Account Fraud"
+  },
+  {
+    id: "TXN-2024-005",
+    amount: "$899.99",
+    currency: "USD",
+    rail: "apple",
+    railLabel: "Apple Pay",
+    riskLevel: "medium",
+    timestamp: "2024-11-12 18:04 EST",
+    sender: "TOKEN-APL-8822",
+    receiver: "LuxeGoods NYC",
+    receiverBank: "Adyen",
+    country: "US",
+    deviceId: "iPhone-NEW-PROV-2244",
+    velocityFlags: "Card provisioned to Apple Pay 3 hours before transaction. Provisioning triggered from new IP. No Face ID fallback — passcode used.",
+    priorSARs: 0,
+    typology: "Stolen Card Provisioning — Digital Wallet"
+  },
+  {
+    id: "TXN-2024-006",
+    amount: "$72,000.00",
+    currency: "USD",
+    rail: "wire",
+    railLabel: "Wire Transfer",
+    riskLevel: "high",
+    timestamp: "2024-11-11 11:03 EST",
+    sender: "RealTrust Escrow LLC",
+    receiver: "Sunrise Properties Int'l",
+    receiverBank: "Bank of Valletta, Malta",
+    country: "MT",
+    deviceId: "N/A",
+    velocityFlags: "Real estate wire. Beneficiary substituted 24h before closing. Malta is FATF monitored jurisdiction. SWIFT recall window: 4 hours remaining.",
+    priorSARs: 1,
+    typology: "Real Estate Wire Fraud / BEC"
+  },
+  {
+    id: "TXN-2024-007",
+    amount: "$445.00",
+    currency: "USD",
+    rail: "google",
+    railLabel: "Google Pay",
+    riskLevel: "low",
+    timestamp: "2024-11-11 09:45 PST",
+    sender: "TOKEN-GPY-5531",
+    receiver: "Whole Foods Market",
+    receiverBank: "Chase Merchant",
+    country: "US",
+    deviceId: "Pixel-8-REG-7741",
+    velocityFlags: "Known device. Card on file 6 months. NFC tap transaction. Biometric confirmed. Normal spend range.",
+    priorSARs: 0,
+    typology: "Possible Friendly Fraud — Low Confidence"
+  },
+  {
+    id: "TXN-2024-008",
+    amount: "£2,800.00",
+    currency: "GBP",
+    rail: "sepa",
+    railLabel: "UK Faster Payments",
+    riskLevel: "medium",
+    timestamp: "2024-11-10 16:22 GMT",
+    sender: "James Okafor",
+    receiver: "CryptoVault Exchange",
+    receiverBank: "Clearbank UK",
+    country: "GB",
+    deviceId: "MOB-UK-8831",
+    velocityFlags: "Crypto exchange recipient. FCA registered but high-risk sector. Second payment this week. Customer age: 71. Potential romance scam indicators.",
+    priorSARs: 0,
+    typology: "Romance Scam / Investment Fraud Cashout"
+  },
+  {
+    id: "TXN-2024-009",
+    amount: "$9,800.00",
+    currency: "USD",
+    rail: "ach",
+    railLabel: "ACH Credit",
+    riskLevel: "high",
+    timestamp: "2024-11-10 07:55 EST",
+    sender: "PayrollPro Corp",
+    receiver: "Account #****3319",
+    receiverBank: "Internal",
+    country: "US",
+    deviceId: "N/A",
+    velocityFlags: "Payroll amount 340% above baseline. Direct deposit routing changed via unverified email request 3 days prior. CCD entry class. CATO pattern.",
+    priorSARs: 0,
+    typology: "Payroll Fraud / Corporate Account Takeover (CATO)"
+  },
+  {
+    id: "TXN-2024-010",
+    amount: "$2,100.00",
+    currency: "USD",
+    rail: "cc",
+    railLabel: "Credit Card",
+    riskLevel: "low",
+    timestamp: "2024-11-09 14:30 MST",
+    sender: "CARD *2291",
+    receiver: "Amazon Marketplace",
+    receiverBank: "Stripe",
+    country: "US",
+    deviceId: "KNOWN-DEV-1142",
+    velocityFlags: "Known device. Known merchant. 3DS authenticated. Normal spend pattern. Customer filed chargeback citing non-receipt.",
+    priorSARs: 0,
+    typology: "Possible First-Party Friendly Fraud"
+  }
+];
+
+let selectedCase = null;
+let currentTab = 'preloaded';
+
+// ─── RENDER CASE QUEUE ────────────────────────────────────────────────────
+function renderCaseList(cases, containerId) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  cases.forEach((c, i) => {
+    const div = document.createElement('div');
+    div.className = 'case-card';
+    div.id = `card-${c.id}`;
+    div.onclick = () => selectCase(c, `card-${c.id}`);
+    div.innerHTML = `
+      <div class="case-card-top">
+        <span class="case-id">${c.id}</span>
+        <span class="risk-badge risk-${c.riskLevel}">${c.riskLevel}</span>
+      </div>
+      <div class="case-amount">${c.amount}</div>
+      <div class="case-meta">${c.timestamp}</div>
+      <div class="case-meta" style="margin-top:0.2rem">${c.sender} → ${c.receiver}</div>
+      <span class="case-rail-tag rail-${c.rail}">${c.railLabel}</span>
+    `;
+    container.appendChild(div);
+  });
+}
+
+renderCaseList(CASES, 'caseList');
+document.getElementById('queueCount').textContent = `${CASES.length} cases`;
+
+// ─── SELECT CASE ──────────────────────────────────────────────────────────
+function selectCase(caseData, cardId) {
+  document.querySelectorAll('.case-card').forEach(c => c.classList.remove('selected'));
+  const card = document.getElementById(cardId);
+  if (card) card.classList.add('selected');
+  selectedCase = caseData;
+  showAnalysisReady(caseData);
+}
+
+function showAnalysisReady(c) {
+  const panel = document.getElementById('analysisPanel');
+  panel.innerHTML = `
+    <div class="memo-header">
+      <div class="memo-case-id">CASE // ${c.id}</div>
+      <div class="memo-title">${c.amount} · ${c.railLabel}</div>
+      <div class="memo-meta-row">
+        <div class="memo-meta-item"><span class="memo-meta-label">Rail</span><span class="memo-meta-val">${c.railLabel}</span></div>
+        <div class="memo-meta-item"><span class="memo-meta-label">Timestamp</span><span class="memo-meta-val">${c.timestamp}</span></div>
+        <div class="memo-meta-item"><span class="memo-meta-label">Country</span><span class="memo-meta-val">${c.country}</span></div>
+        <div class="memo-meta-item"><span class="memo-meta-label">Risk</span><span class="memo-meta-val" style="color:${c.riskLevel==='high'?'var(--red)':c.riskLevel==='medium'?'var(--amber)':'var(--green)'}">${c.riskLevel.toUpperCase()}</span></div>
+        <div class="memo-meta-item"><span class="memo-meta-label">Prior SARs</span><span class="memo-meta-val">${c.priorSARs}</span></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:0.75rem;">
+      <button class="analyze-btn" onclick="runAnalysis()">▶ Run AI Triage Analysis</button>
+    </div>
+    <div class="memo-section">
+      <div class="memo-section-header">Velocity Flags · Raw Signals</div>
+      <div class="memo-section-body">${c.velocityFlags}</div>
+    </div>
+  `;
+}
+
+// ─── RUN ANALYSIS ─────────────────────────────────────────────────────────
+async function runAnalysis() {
+  if (!selectedCase) return;
+  const panel = document.getElementById('analysisPanel');
+  const btn = panel.querySelector('.analyze-btn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Analyzing...'; }
+
+  const loadingHTML = `
+    <div class="loading-state">
+      <div class="loading-line full"></div>
+      <div class="loading-line med"></div>
+      <div class="loading-line short"></div>
+      <div class="loading-line full"></div>
+      <div class="loading-line med"></div>
+    </div>
+  `;
+
+  const c = selectedCase;
+  const prompt = `You are a senior fraud investigator and compliance analyst. Analyze this fraud case and produce a structured triage memo.
+
+CASE DATA:
+- Case ID: ${c.id}
+- Payment Rail: ${c.railLabel}
+- Amount: ${c.amount} (${c.currency})
+- Timestamp: ${c.timestamp}
+- Sender: ${c.sender}
+- Receiver: ${c.receiver}
+- Receiver Bank: ${c.receiverBank}
+- Country: ${c.country}
+- Device ID: ${c.deviceId}
+- Velocity/Behavioral Flags: ${c.velocityFlags}
+- Suspected Typology: ${c.typology}
+- Prior SARs on Account: ${c.priorSARs}
+
+Produce a JSON response with EXACTLY these fields:
+{
+  "typology": "Name of fraud typology",
+  "typologyDetail": "2-3 sentence explanation of what this fraud type is and how it works",
+  "riskNarrative": "3-4 sentence plain-English narrative of what appears to be happening in this case, written as a senior investigator would write it",
+  "regulatoryObligations": "2-3 sentences citing the specific regulations triggered (BSA, Reg E, Reg CC, UCC 4A, PSD2, OFAC, FinCEN SAR thresholds, NACHA rules, etc.) and what they require",
+  "uncertainties": "1-2 sentences on what the agent does NOT know and what additional investigation would resolve",
+  "disposition": "HOLD" or "ESCALATE" or "CLEAR",
+  "dispositionReason": "1-2 sentence justification for the disposition",
+  "confidenceScore": number between 55 and 97,
+  "sarDraftRequired": true or false,
+  "urgencyLevel": "CRITICAL" or "HIGH" or "MEDIUM" or "LOW",
+  "urgencyReason": "One sentence on why this urgency level"
+}
+
+Return ONLY the JSON. No preamble, no markdown fences.`;
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+    const text = data.content.map(i => i.text || '').join('');
+    const clean = text.replace(/```json|```/g, '').trim();
+    const result = JSON.parse(clean);
+    renderMemo(c, result);
+  } catch (err) {
+    panel.innerHTML += `<div class="memo-section"><div class="memo-section-header">Error</div><div class="memo-section-body">Analysis failed. Please check your API connection and try again.<br><small style="opacity:0.5">${err.message}</small></div></div>`;
+  }
+}
+
+// ─── RENDER MEMO ──────────────────────────────────────────────────────────
+function renderMemo(c, r) {
+  const panel = document.getElementById('analysisPanel');
+  const dispClass = r.disposition === 'HOLD' ? 'disp-hold' : r.disposition === 'ESCALATE' ? 'disp-escalate' : 'disp-clear';
+
+  panel.innerHTML = `
+    <div class="memo-header">
+      <div class="memo-case-id">TRIAGE MEMO // ${c.id} // ${new Date().toLocaleString()}</div>
+      <div class="memo-title">${c.amount} · ${c.railLabel}</div>
+      <div class="memo-meta-row">
+        <div class="memo-meta-item"><span class="memo-meta-label">Rail</span><span class="memo-meta-val">${c.railLabel}</span></div>
+        <div class="memo-meta-item"><span class="memo-meta-label">Country</span><span class="memo-meta-val">${c.country}</span></div>
+        <div class="memo-meta-item"><span class="memo-meta-label">Urgency</span><span class="memo-meta-val" style="color:${r.urgencyLevel==='CRITICAL'?'var(--red)':r.urgencyLevel==='HIGH'?'var(--amber)':'var(--text2)'}">${r.urgencyLevel}</span></div>
+        <div class="memo-meta-item"><span class="memo-meta-label">SAR Required</span><span class="memo-meta-val" style="color:${r.sarDraftRequired?'var(--amber)':'var(--text3)'}">${r.sarDraftRequired?'YES':'NO'}</span></div>
+        <div class="memo-meta-item"><span class="memo-meta-label">Prior SARs</span><span class="memo-meta-val">${c.priorSARs}</span></div>
+      </div>
+    </div>
+
+    <div class="memo-section">
+      <div class="memo-section-header">01 · Fraud Typology Identification</div>
+      <div class="memo-section-body"><strong>${r.typology}</strong><br><br>${r.typologyDetail}</div>
+    </div>
+
+    <div class="memo-section">
+      <div class="memo-section-header">02 · Risk Narrative</div>
+      <div class="memo-section-body">${r.riskNarrative}</div>
+    </div>
+
+    <div class="memo-section">
+      <div class="memo-section-header">03 · Regulatory Obligations</div>
+      <div class="memo-section-body">${r.regulatoryObligations}</div>
+    </div>
+
+    <div class="memo-section">
+      <div class="memo-section-header">04 · Agent Uncertainty Flags</div>
+      <div class="memo-section-body" style="color:var(--amber)">${r.uncertainties}</div>
+    </div>
+
+    <div class="memo-section">
+      <div class="memo-section-header">05 · Disposition & Urgency</div>
+      <div class="memo-section-body">${r.urgencyReason}</div>
+      <div class="disposition-block">
+        <div>
+          <div class="disposition-label">Recommended</div>
+          <div class="disposition-val ${dispClass}">${r.disposition}</div>
+        </div>
+        <div class="confidence-bar-wrap">
+          <div class="confidence-label">
+            <span>AI Confidence</span>
+            <span>${r.confidenceScore}%</span>
+          </div>
+          <div class="confidence-bar">
+            <div class="confidence-fill" style="width:${r.confidenceScore}%"></div>
+          </div>
+        </div>
+        <div>
+          <div class="disposition-label">SAR Draft</div>
+          <div class="disposition-val" style="color:${r.sarDraftRequired?'var(--amber)':'var(--text3)'}">${r.sarDraftRequired?'REQUIRED':'NOT REQUIRED'}</div>
+        </div>
+      </div>
+      <div class="memo-section-body" style="border-top:1px solid var(--border);padding-top:0.75rem;">${r.dispositionReason}</div>
+    </div>
+
+    <div style="display:flex;gap:0.75rem;padding-top:0.5rem;">
+      <button class="analyze-btn" onclick="showAnalysisReady(selectedCase)">← New Analysis</button>
+      <button class="upload-btn" onclick="copyMemo(this, \`${escapeForAttr(JSON.stringify(r))}\`)">Copy Memo</button>
+    </div>
+  `;
+}
+
+function escapeForAttr(str) {
+  return str.replace(/`/g, '\\`').replace(/\$/g, '\\$');
+}
+
+function copyMemo(btn, jsonStr) {
+  try {
+    const r = JSON.parse(jsonStr);
+    const text = `FRAUD TRIAGE MEMO\n${new Date().toLocaleString()}\n\nTYPOLOGY: ${r.typology}\n\nRISK NARRATIVE:\n${r.riskNarrative}\n\nREGULATORY OBLIGATIONS:\n${r.regulatoryObligations}\n\nUNCERTAINTIES:\n${r.uncertainties}\n\nDISPOSITION: ${r.disposition} (${r.confidenceScore}% confidence)\n${r.dispositionReason}\n\nSAR REQUIRED: ${r.sarDraftRequired?'YES':'NO'}\nURGENCY: ${r.urgencyLevel}`;
+    navigator.clipboard.writeText(text).then(() => { btn.textContent = 'Copied!'; setTimeout(()=>btn.textContent='Copy Memo',2000); });
+  } catch(e) {}
+}
+
+// ─── TABS ─────────────────────────────────────────────────────────────────
+function switchTab(tab, el) {
+  document.querySelectorAll('.tool-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  currentTab = tab;
+
+  const queue = document.querySelector('.tool-body');
+  const uploadTab = document.getElementById('uploadTab');
+
+  if (tab === 'preloaded') {
+    queue.style.display = 'grid';
+    uploadTab.style.display = 'none';
+  } else {
+    queue.style.display = 'none';
+    uploadTab.style.display = 'block';
+  }
+}
+
+// ─── CSV UPLOAD ───────────────────────────────────────────────────────────
+function handleCSVUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const text = e.target.result;
+    const rows = text.split('\n').filter(r => r.trim());
+    const headers = rows[0].split(',').map(h => h.trim().replace(/"/g,''));
+    const uploadedCases = rows.slice(1, 11).map((row, i) => {
+      const vals = row.split(',').map(v => v.trim().replace(/"/g,''));
+      const obj = {};
+      headers.forEach((h, idx) => obj[h] = vals[idx] || '');
+      const amt = obj['Amount'] || obj['amount'] || obj['TransactionAmt'] || obj['transaction_amount'] || '$0';
+      const isNumeric = !isNaN(parseFloat(amt));
+      return {
+        id: `CSV-${String(i+1).padStart(3,'0')}`,
+        amount: isNumeric ? `$${parseFloat(amt).toFixed(2)}` : amt,
+        currency: obj['Currency'] || obj['currency'] || 'USD',
+        rail: 'cc',
+        railLabel: obj['Type'] || obj['type'] || obj['payment_type'] || 'Transaction',
+        riskLevel: obj['isFraud'] === '1' || obj['fraud'] === '1' || obj['Class'] === '1' ? 'high' : 'low',
+        timestamp: obj['Time'] || obj['timestamp'] || obj['TransactionDT'] || new Date().toLocaleString(),
+        sender: obj['nameOrig'] || obj['sender'] || obj['cardholder'] || 'Account Holder',
+        receiver: obj['nameDest'] || obj['merchant'] || obj['receiver'] || 'Merchant',
+        receiverBank: obj['bank'] || 'External',
+        country: obj['country'] || obj['Country'] || 'US',
+        deviceId: obj['DeviceInfo'] || obj['device_id'] || 'N/A',
+        velocityFlags: `Uploaded from CSV. Row ${i+2}. Raw values: ${Object.entries(obj).slice(0,4).map(([k,v])=>`${k}=${v}`).join(', ')}`,
+        priorSARs: 0,
+        typology: 'To be determined by AI analysis'
+      };
+    });
+
+    const container = document.getElementById('uploadedCaseQueue');
+    container.innerHTML = `
+      <div class="tool-interface">
+        <div class="tool-topbar">
+          <div class="tool-topbar-left">
+            <div class="tool-dots"><div class="tool-dot dot-r"></div><div class="tool-dot dot-y"></div><div class="tool-dot dot-g"></div></div>
+            <div class="tool-title-bar">${file.name} — ${uploadedCases.length} cases loaded</div>
+          </div>
+        </div>
+        <div class="tool-body">
+          <div class="case-queue" style="max-height:500px;">
+            <div class="queue-header"><span class="queue-title">Uploaded Cases</span><span class="queue-count">${uploadedCases.length}</span></div>
+            <div id="uploadedList"></div>
+          </div>
+          <div class="analysis-panel" id="uploadedAnalysisPanel">
+            <div class="analysis-empty"><div class="analysis-empty-icon">⬡</div><p>Select a case to analyze</p></div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    renderUploadedCases(uploadedCases);
+  };
+  reader.readAsText(file);
+}
+
+function renderUploadedCases(cases) {
+  const container = document.getElementById('uploadedList');
+  cases.forEach((c, i) => {
+    const div = document.createElement('div');
+    div.className = 'case-card';
+    div.id = `ucard-${c.id}`;
+    div.onclick = () => {
+      document.querySelectorAll('#uploadedList .case-card').forEach(x => x.classList.remove('selected'));
+      div.classList.add('selected');
+      selectedCase = c;
+      showUploadedAnalysisReady(c);
+    };
+    div.innerHTML = `
+      <div class="case-card-top">
+        <span class="case-id">${c.id}</span>
+        <span class="risk-badge risk-${c.riskLevel}">${c.riskLevel}</span>
+      </div>
+      <div class="case-amount">${c.amount}</div>
+      <div class="case-meta">${c.sender} → ${c.receiver}</div>
+      <span class="case-rail-tag rail-cc">${c.railLabel}</span>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function showUploadedAnalysisReady(c) {
+  const panel = document.getElementById('uploadedAnalysisPanel');
+  panel.innerHTML = `
+    <div class="memo-header">
+      <div class="memo-case-id">CASE // ${c.id}</div>
+      <div class="memo-title">${c.amount} · ${c.railLabel}</div>
+    </div>
+    <button class="analyze-btn" onclick="runUploadedAnalysis()">▶ Run AI Triage Analysis</button>
+    <div class="memo-section">
+      <div class="memo-section-header">Raw Signals</div>
+      <div class="memo-section-body">${c.velocityFlags}</div>
+    </div>
+  `;
+}
+
+async function runUploadedAnalysis() {
+  if (!selectedCase) return;
+  const panel = document.getElementById('uploadedAnalysisPanel');
+  const btn = panel.querySelector('.analyze-btn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Analyzing...'; }
+
+  const c = selectedCase;
+  const prompt = `You are a senior fraud investigator. Analyze this uploaded transaction case and produce a structured triage memo.
+
+CASE DATA:
+- Case ID: ${c.id}
+- Amount: ${c.amount} (${c.currency})
+- Rail/Type: ${c.railLabel}
+- Sender: ${c.sender}
+- Receiver: ${c.receiver}
+- Country: ${c.country}
+- Device: ${c.deviceId}
+- Risk Flag: ${c.riskLevel}
+- Raw Signals: ${c.velocityFlags}
+
+Produce a JSON response with EXACTLY these fields:
+{
+  "typology": "Name of most likely fraud typology based on available data",
+  "typologyDetail": "2-3 sentence explanation",
+  "riskNarrative": "3-4 sentence plain-English narrative of what appears to be happening",
+  "regulatoryObligations": "2-3 sentences citing specific regulations triggered",
+  "uncertainties": "1-2 sentences on what additional data would improve analysis",
+  "disposition": "HOLD" or "ESCALATE" or "CLEAR",
+  "dispositionReason": "1-2 sentence justification",
+  "confidenceScore": number between 45 and 90,
+  "sarDraftRequired": true or false,
+  "urgencyLevel": "CRITICAL" or "HIGH" or "MEDIUM" or "LOW",
+  "urgencyReason": "One sentence"
+}
+
+Return ONLY the JSON. No preamble, no markdown fences.`;
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+    const data = await response.json();
+    const text = data.content.map(i => i.text || '').join('');
+    const clean = text.replace(/```json|```/g, '').trim();
+    const result = JSON.parse(clean);
+    renderUploadedMemo(c, result);
+  } catch (err) {
+    panel.innerHTML += `<div class="memo-section"><div class="memo-section-header">Error</div><div class="memo-section-body">${err.message}</div></div>`;
+  }
+}
+
+function renderUploadedMemo(c, r) {
+  const panel = document.getElementById('uploadedAnalysisPanel');
+  const dispClass = r.disposition === 'HOLD' ? 'disp-hold' : r.disposition === 'ESCALATE' ? 'disp-escalate' : 'disp-clear';
+  panel.innerHTML = `
+    <div class="memo-header">
+      <div class="memo-case-id">TRIAGE MEMO // ${c.id}</div>
+      <div class="memo-title">${c.amount} · ${c.railLabel}</div>
+      <div class="memo-meta-row">
+        <div class="memo-meta-item"><span class="memo-meta-label">Urgency</span><span class="memo-meta-val">${r.urgencyLevel}</span></div>
+        <div class="memo-meta-item"><span class="memo-meta-label">SAR</span><span class="memo-meta-val">${r.sarDraftRequired?'REQUIRED':'NO'}</span></div>
+      </div>
+    </div>
+    <div class="memo-section"><div class="memo-section-header">Typology</div><div class="memo-section-body"><strong>${r.typology}</strong><br><br>${r.typologyDetail}</div></div>
+    <div class="memo-section"><div class="memo-section-header">Risk Narrative</div><div class="memo-section-body">${r.riskNarrative}</div></div>
+    <div class="memo-section"><div class="memo-section-header">Regulatory Obligations</div><div class="memo-section-body">${r.regulatoryObligations}</div></div>
+    <div class="memo-section"><div class="memo-section-header">Uncertainties</div><div class="memo-section-body" style="color:var(--amber)">${r.uncertainties}</div></div>
+    <div class="memo-section">
+      <div class="memo-section-header">Disposition</div>
+      <div class="disposition-block">
+        <div><div class="disposition-label">Recommended</div><div class="disposition-val ${dispClass}">${r.disposition}</div></div>
+        <div class="confidence-bar-wrap">
+          <div class="confidence-label"><span>Confidence</span><span>${r.confidenceScore}%</span></div>
+          <div class="confidence-bar"><div class="confidence-fill" style="width:${r.confidenceScore}%"></div></div>
+        </div>
+      </div>
+      <div class="memo-section-body" style="border-top:1px solid var(--border);padding-top:0.75rem;">${r.dispositionReason}</div>
+    </div>
+    <button class="analyze-btn" onclick="showUploadedAnalysisReady(selectedCase)">← New Analysis</button>
+  `;
+}
+
+// ─── SCROLL REVEAL ────────────────────────────────────────────────────────
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
